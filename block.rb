@@ -1,4 +1,5 @@
 require 'gosu'
+require 'pry-byebug'
 
 # HELPER METHOD
 def sum_arr(arr_1, arr_2)
@@ -9,6 +10,7 @@ class Block
   attr_accessor :x, :y
 
   def initialize(attr)
+    @attr = attr
     @blocksize = attr[:blocksize]
     @x = attr[:width] / 2
     @y = 1
@@ -31,17 +33,29 @@ class Block
   end
 
   def move
-    @y = @y + 1;
+    @y = @y + 1 unless floor_reached?
+  end
+
+
+  def floor_reached?
+    floor_pos = @attr[:height]
+    diff = 0
+    if @dna.any? { |block| block.include?("DD") }
+      diff = 2
+    elsif @dna.any? { |block| block.include?("D") }
+      diff = 1
+    end
+    @y + diff == floor_pos
   end
 
   BLOCKS = [
-    ["L", "U", "UR"],
-    ["U", "D", "DR"],
-    ["U", "D", "DL"],
-    ["L", "R", "U"],
-    ["D", "U", "UU"],
-    ["U", "UR", "R"],
-    ["UL", "U", "R"],
+    ["L", "D", "DR"],
+    ["D", "U", "UR"],
+    ["D", "U", "UL"],
+    ["L", "R", "D"],
+    ["U", "D", "DD"],
+    ["D", "DR", "R"],
+    ["DL", "D", "R"],
   ]
   COLORS = [
     Gosu::Color::WHITE,

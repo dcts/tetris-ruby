@@ -3,14 +3,6 @@ require_relative 'block'
 # require_relative 'defstruct'
 
 class GameWindow < Gosu::Window
-  # def initialize
-  #   @snake = Snake.new(Pos.new(10, 10), 30, 20) # ( POS, gidsize, blocksize )
-  #   @food = Food.new(@snake)
-  #   @count = 0
-
-  #   super @snake.blocksize * @snake.gridsize, @snake.blocksize * @snake.gridsize
-  # end
-
 
   def initialize(attr)
     @count = 0
@@ -36,9 +28,8 @@ class GameWindow < Gosu::Window
     @block.x = @block.x - 1 if button == Gosu::KbLeft
   end
 
-
   def draw
-    if (@count % 20).zero?
+    if (@count % 5).zero?
       @block.move
     end
     @count += 1
