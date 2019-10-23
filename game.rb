@@ -42,7 +42,5 @@ end
 # start.rb
 game = GameWindow.new(
   blocksize: 30,
-  width: 30,
-  height: 30,
   background: Gosu::Color::BLACK,
 ).show

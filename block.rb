@@ -43,12 +43,12 @@ class Block
   def floor_reached?
     floor_pos = @attr[:height]
     diff = 0
-    if @dna.any? { |block| block.include?("DD") }
+    if @dna.any? { |block| block.include?("UU") }
       diff = 2
-    elsif @dna.any? { |block| block.include?("D") }
+    elsif @dna.any? { |block| block.include?("U") }
       diff = 1
     end
-    @y + diff == floor_pos
+    @y + diff >= floor_pos - 1
   end
 
   BLOCKS = [
@@ -73,8 +73,8 @@ class Block
   MAPPING = {
     "L" => [-1, 0],
     "R" => [1, 0],
-    "U" => [0, -1],
     "D" => [0, 1],
+    "U" => [0, -1],
   }
   ROTATION = {
     "L" => "U",
