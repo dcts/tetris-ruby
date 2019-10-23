@@ -46,7 +46,7 @@ class Block
     elsif @dna.any? { |block| block.include?("D") }
       diff = 1
     end
-    @y + diff == floor_pos - 1
+    @y + diff == floor_pos
   end
 
   BLOCKS = [
