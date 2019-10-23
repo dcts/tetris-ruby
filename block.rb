@@ -30,6 +30,7 @@ class Block
   end
 
   def rotate
+    @dna.map! { |block| block.chars.map { |char| ROTATION[char] }.join("") }
   end
 
   def move
@@ -45,7 +46,7 @@ class Block
     elsif @dna.any? { |block| block.include?("D") }
       diff = 1
     end
-    @y + diff == floor_pos
+    @y + diff == floor_pos - 1
   end
 
   BLOCKS = [
@@ -72,6 +73,12 @@ class Block
     "R" => [1, 0],
     "U" => [0, -1],
     "D" => [0, 1],
+  }
+  ROTATION = {
+    "L" => "U",
+    "U" => "R",
+    "R" => "D",
+    "D" => "L",
   }
 end
 
