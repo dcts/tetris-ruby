@@ -27,6 +27,8 @@ class Block
       block.chars.each { |char| diff = sum_arr(diff, MAPPING[char]) }
       Gosu.draw_rect((@x - diff[0]) * @blocksize, (@y - diff[1]) * @blocksize, @blocksize, @blocksize, @color)
     end
+    @message = Gosu::Image.from_text(self, "y = #{@y}", Gosu.default_font_name, 20)
+    @message.draw(0, 25, 0)
   end
 
   def rotate
