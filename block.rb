@@ -27,9 +27,12 @@ class Block
       block.chars.each { |char| diff = sum_arr(diff, MAPPING[char]) }
       Gosu.draw_rect((@x - diff[0]) * @blocksize, (@y - diff[1]) * @blocksize, @blocksize, @blocksize, @color)
     end
+    @message = Gosu::Image.from_text(self, "y = #{@y}", Gosu.default_font_name, 20)
+    @message.draw(0, 25, 0)
   end
 
   def rotate
+    @dna.map! { |block| block.chars.map { |char| ROTATION[char] }.join("") }
   end
 
   def move
@@ -40,12 +43,12 @@ class Block
   def floor_reached?
     floor_pos = @attr[:height]
     diff = 0
-    if @dna.any? { |block| block.include?("DD") }
+    if @dna.any? { |block| block.include?("UU") }
       diff = 2
-    elsif @dna.any? { |block| block.include?("D") }
+    elsif @dna.any? { |block| block.include?("U") }
       diff = 1
     end
-    @y + diff == floor_pos
+    @y + diff >= floor_pos - 1
   end
 
   BLOCKS = [
@@ -70,8 +73,14 @@ class Block
   MAPPING = {
     "L" => [-1, 0],
     "R" => [1, 0],
-    "U" => [0, -1],
     "D" => [0, 1],
+    "U" => [0, -1],
+  }
+  ROTATION = {
+    "L" => "U",
+    "U" => "R",
+    "R" => "D",
+    "D" => "L",
   }
 end
 

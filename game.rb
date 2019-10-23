@@ -23,13 +23,14 @@ class GameWindow < Gosu::Window
 
   def button_down(button)
     close if button == Gosu::KbEscape
-    @block = Block.new(@attr) if button == Gosu::KbSpace
+    @block = Block.new(@attr) if button == Gosu::KbReturn
+    @block.rotate if button == Gosu::KbSpace
     @block.x = @block.x + 1 if button == Gosu::KbRight
     @block.x = @block.x - 1 if button == Gosu::KbLeft
   end
 
   def draw
-    if (@count % 5).zero?
+    if (@count % 6).zero?
       @block.move
     end
     @count += 1
@@ -41,7 +42,5 @@ end
 # start.rb
 game = GameWindow.new(
   blocksize: 30,
-  width: 30,
-  height: 30,
   background: Gosu::Color::BLACK,
 ).show
