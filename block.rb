@@ -9,24 +9,29 @@ end
 class Block
   attr_accessor :x, :y
 
-  def initialize(attr)
-    @attr = attr
-    @blocksize = attr[:blocksize]
-    @x = attr[:width] / 2
-    @y = 1
+  def initialize(options)
+    @options = options
     @dna = BLOCKS.sample
     @color = COLORS.sample
+    @x = @options.width / 2
+    @y = 1
+  end
+
+  def blocksize
+    @options.blocksize
   end
 
   def draw
     # draw origin
-    Gosu.draw_rect(@x * @blocksize, @y * @blocksize, @blocksize, @blocksize, @color)
+    Gosu.draw_rect(@x * blocksize, @y * blocksize, blocksize, blocksize, @color)
     # draw array
     @dna.each do |block|
       diff = [0, 0]
       block.chars.each { |char| diff = sum_arr(diff, MAPPING[char]) }
-      Gosu.draw_rect((@x - diff[0]) * @blocksize, (@y - diff[1]) * @blocksize, @blocksize, @blocksize, @color)
+      Gosu.draw_rect((@x - diff[0]) * blocksize, (@y - diff[1]) * blocksize, blocksize, blocksize, @color)
     end
+    @message = Gosu::Image.from_text(self, "x = #{@x}", Gosu.default_font_name, 20)
+    @message.draw(0, 5, 0)
     @message = Gosu::Image.from_text(self, "y = #{@y}", Gosu.default_font_name, 20)
     @message.draw(0, 25, 0)
   end
@@ -39,9 +44,8 @@ class Block
     @y = @y + 1 unless floor_reached?
   end
 
-
   def floor_reached?
-    floor_pos = @attr[:height]
+    floor_pos = @options.height
     diff = 0
     if @dna.any? { |block| block.include?("UU") }
       diff = 2
