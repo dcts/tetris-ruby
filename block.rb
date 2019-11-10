@@ -7,18 +7,33 @@ def sum_arr(arr_1, arr_2)
 end
 
 class Block
-  attr_accessor :x, :y
+  attr_accessor :x, :y, :dna, :color
 
   def initialize(options)
     @options = options
     @dna = BLOCKS.sample
     @color = COLORS.sample
     @x = @options.width / 2
-    @y = 1
+    @y = 0
   end
 
   def blocksize
     @options.blocksize
+  end
+
+  def coordinates
+    points = []
+    points << {x: @x, y: @y}
+    @dna.each do |cell|
+      x = @x
+      y = @y
+      cell.chars.map { |dir| MAPPING[dir] }.each do |arr|
+        x += arr[0]
+        y += arr[1]
+      end
+      points << {x: x, y: y}
+    end
+    return points
   end
 
   def draw
@@ -26,9 +41,13 @@ class Block
     Gosu.draw_rect(@x * blocksize, @y * blocksize, blocksize, blocksize, @color)
     # draw array
     @dna.each do |block|
-      diff = [0, 0]
-      block.chars.each { |char| diff = sum_arr(diff, MAPPING[char]) }
-      Gosu.draw_rect((@x - diff[0]) * blocksize, (@y - diff[1]) * blocksize, blocksize, blocksize, @color)
+      x = @x
+      y = @y
+      block.chars.each do |char|
+        x += MAPPING[char][0]
+        y += MAPPING[char][1]
+      end
+      Gosu.draw_rect(x * blocksize, y * blocksize, blocksize, blocksize, @color)
     end
     @message = Gosu::Image.from_text(self, "x = #{@x}", Gosu.default_font_name, 20)
     @message.draw(0, 5, 0)

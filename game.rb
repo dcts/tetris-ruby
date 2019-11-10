@@ -20,6 +20,12 @@ class GameWindow < Gosu::Window
     @field.map { |row| row.map { |cell| code2char(cell) }.join }.join("\n")
   end
 
+  def update_field(x,y,val)
+    field_dup = @field.map(&:dup) # need to duplicate original array
+    field_dup[y][x] = val
+    @field = field_dup
+  end
+
   def initialize_field # created string that represents gamefield
     Array.new(@options.height,Array.new(@options.width, 0)) # .map(&:join).join("\n")
   end
@@ -36,8 +42,8 @@ class GameWindow < Gosu::Window
 
   def draw
     if (@count % 6).zero?
-      # @block.move
       puts "FIELD: \n\n#{fieldstr}"
+      puts @block.dna
     end
     @count += 1
     draw_field # draw playing fielld
@@ -45,15 +51,30 @@ class GameWindow < Gosu::Window
   end
 
   def draw_field
-
+    r = 0
+    @field.each do |row|
+      c = 0
+      row.each do |col|
+        Gosu.draw_rect(c * blocksize, r * blocksize, blocksize, blocksize, COLORCODES[col]) if col != 0
+        c += 1
+      end
+      r += 1
+    end
   end
 
   private
 
+  def blocksize
+    @options.blocksize
+  end
+
   def press_enter
-    puts "hi from save block"
+    puts "ENTER PRESSED -> saving block"
     # add block to wall
-    binding.pry
+    @block.coordinates.each do |point|
+      update_field(point[:x], point[:y], COLORCODES_REVERSED[@block.color])
+    end
+    @block = Block.new(@options)
   end
 
   def code2color(code)
