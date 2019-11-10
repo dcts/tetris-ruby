@@ -1,11 +1,6 @@
 require 'gosu'
 require 'pry-byebug'
 
-# HELPER METHOD
-def sum_arr(arr_1, arr_2)
-  [arr_1,arr_2].transpose.map { |el| el.reduce(&:+) }
-end
-
 class Block
   attr_accessor :x, :y, :dna, :color
 
@@ -25,11 +20,9 @@ class Block
     points = []
     points << {x: @x, y: @y}
     @dna.each do |cell|
-      x = @x
-      y = @y
+      x, y = @x, @y
       cell.chars.map { |dir| MAPPING[dir] }.each do |arr|
-        x += arr[0]
-        y += arr[1]
+        x, y = x+arr[0], y+arr[1]
       end
       points << {x: x, y: y}
     end
@@ -41,11 +34,9 @@ class Block
     Gosu.draw_rect(@x * blocksize, @y * blocksize, blocksize, blocksize, @color)
     # draw array
     @dna.each do |block|
-      x = @x
-      y = @y
+      x, y = @x, @y
       block.chars.each do |char|
-        x += MAPPING[char][0]
-        y += MAPPING[char][1]
+        x, y = x+MAPPING[char][0], y+MAPPING[char][1]
       end
       Gosu.draw_rect(x * blocksize, y * blocksize, blocksize, blocksize, @color)
     end
@@ -107,4 +98,7 @@ class Block
   }
 end
 
-
+# HELPER METHOD (deprecated -> not needed anymore)
+def sum_arr(arr_1, arr_2)
+  [arr_1,arr_2].transpose.map { |el| el.reduce(&:+) }
+end

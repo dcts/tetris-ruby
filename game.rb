@@ -44,6 +44,7 @@ class GameWindow < Gosu::Window
     if (@count % 6).zero?
       puts "FIELD: \n\n#{fieldstr}"
       puts @block.dna
+      # @block.move
     end
     @count += 1
     draw_field # draw playing fielld
