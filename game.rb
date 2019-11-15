@@ -34,18 +34,18 @@ class GameWindow < Gosu::Window
     close if button == Gosu::KbEscape
     press_enter if button == Gosu::KbReturn
     @block.rotate if button == Gosu::KbSpace
-    @block.x = @block.x + 1 if button == Gosu::KbRight
-    @block.x = @block.x - 1 if button == Gosu::KbLeft
-    @block.y = @block.y + 1 if button == Gosu::KbDown
-    @block.y = @block.y - 1 if button == Gosu::KbUp
+    @block.move("right", @field) if button == Gosu::KbRight
+    @block.move("left", @field)  if button == Gosu::KbLeft
+    @block.move("down", @field)  if button == Gosu::KbDown
+    @block.move("up", @field)    if button == Gosu::KbUp
   end
 
   def draw
-    if (@count % 6).zero?
-      puts "FIELD: \n\n#{fieldstr}"
-      puts @block.dna
-      # @block.move
-    end
+    # if (@count % 6).zero?
+    #   puts "FIELD: \n\n#{fieldstr}"
+    #   puts @block.dna
+    #   # @block.move
+    # end
     @count += 1
     draw_field # draw playing fielld
     @block.draw # draw current block
@@ -70,12 +70,13 @@ class GameWindow < Gosu::Window
   end
 
   def press_enter
-    puts "ENTER PRESSED -> saving block"
-    # add block to wall
-    @block.coordinates.each do |point|
-      update_field(point[:x], point[:y], COLORCODES_REVERSED[@block.color])
-    end
-    @block = Block.new(@options)
+    puts "ENTER PRESSED -> checking collision"
+    puts "collision: #{@block.collision?(@field)}"
+    # # add block to wall
+    # @block.coordinates.each do |point|
+    #   update_field(point[:x], point[:y], COLORCODES_REVERSED[@block.color])
+    # end
+    # @block = Block.new(@options)
   end
 
   def code2color(code)

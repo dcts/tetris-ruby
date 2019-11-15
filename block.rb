@@ -2,7 +2,16 @@ require 'gosu'
 require 'pry-byebug'
 
 class Block
-  attr_accessor :x, :y, :dna, :color
+  attr_accessor :x, :y, :dna, :color, :options
+
+  def self.copy(block)
+    copied_block = Block.new(block.options)
+    copied_block.dna = block.dna
+    copied_block.color = block.color
+    copied_block.x = block.x
+    copied_block.y = block.y
+    return copied_block
+  end
 
   def initialize(options)
     @options = options
@@ -50,8 +59,36 @@ class Block
     @dna.map! { |block| block.chars.map { |char| ROTATION[char] }.join("") }
   end
 
-  def move
-    @y = @y + 1 unless floor_reached?
+  def move(action = "down", field) # down
+    # copy block and compte future state
+    block_new = Block.copy(self)
+    if action == "down"
+      block_new.y = block_new.y + 1
+    elsif action == "up"
+      block_new.y = block_new.y - 1
+    elsif action == "left"
+      block_new.x = block_new.x - 1
+    elsif action == "right"
+      block_new.x = block_new.x + 1
+    end
+
+    # only apply changes if no collision
+    unless block_new.collision?(field)
+      @x = block_new.x
+      @y = block_new.y
+    end
+  end
+
+  def collision?(field)
+    # get grid
+    self.coordinates.each do |point|
+      begin
+        return true if point[:x] < 0 || point[:y] < 0 || field[point[:y]][point[:x]] > 0
+      rescue
+        return true
+      end
+    end
+    return false
   end
 
   def floor_reached?
