@@ -97,15 +97,12 @@ class Block
     return false
   end
 
-  def floor_reached?
-    # floor_pos = @options.height
-    # diff = 0
-    # if @dna.any? { |block| block.include?("UU") }
-    #   diff = 2
-    # elsif @dna.any? { |block| block.include?("U") }
-    #   diff = 1
-    # end
-    # @y + diff >= floor_pos - 1
+  def ground_reached?(field)
+    # simulate a move down
+    x_future = @x
+    y_future = @y + 1
+    coordinates_future = Block.dna_to_coordinates(@dna, x_future, y_future)
+    Block.collision?(field, coordinates_future)
   end
 
   BLOCKS = [

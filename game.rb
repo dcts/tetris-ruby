@@ -46,7 +46,7 @@ class GameWindow < Gosu::Window
       puts "FIELD: \n\n#{fieldstr}"
       puts @block.dna
       @block.move("down", @field)
-      add_block_to_field if @block.floor_reached?
+      add_block_to_field if @block.ground_reached?(@field)
     end
     @count += 1
     draw_field # draw playing fielld
@@ -78,7 +78,7 @@ class GameWindow < Gosu::Window
     cleared.times do
       x << Array.new(@options.width, 0)
     end
-    x + @field
+    @field = x + @field
   end
 
   private
@@ -92,7 +92,6 @@ class GameWindow < Gosu::Window
   end
 
   def add_block_to_field
-    # add block to wall
     @block.coordinates.each do |point|
       update_field(point[:x], point[:y], COLORCODES_REVERSED[@block.color])
     end
