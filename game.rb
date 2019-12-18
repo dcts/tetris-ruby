@@ -42,11 +42,11 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    if (@count % 12).zero?
+    if (@count % 24).zero?
       puts "FIELD: \n\n#{fieldstr}"
       puts @block.dna
-      @block.move("down", @field)
       add_block_to_field if @block.ground_reached?(@field)
+      @block.move("down", @field)
     end
     @count += 1
     draw_field # draw playing fielld
@@ -65,7 +65,6 @@ class GameWindow < Gosu::Window
   def remove_lines
     finished = false
     @field.each do |line|
-      # line detected
       if line.map { |c| c>0 ? 1 : 0 }.sum == line.size
         line.map! { |c| -1000 }
       end
