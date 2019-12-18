@@ -2,7 +2,7 @@ require 'gosu'
 require 'pry-byebug'
 
 class Block
-  attr_accessor :x, :y, :dna, :color, :options
+  attr_accessor :x, :y, :dna, :color, :options, :message
 
   def self.copy(block)
     copied_block = Block.new(block.options)
@@ -54,10 +54,11 @@ class Block
       end
       Gosu.draw_rect(x * blocksize, y * blocksize, blocksize, blocksize, @color)
     end
-    # @message = Gosu::Image.from_text(self, "x = #{@x}", Gosu.default_font_name, 20)
-    # @message.draw(0, 5, 0)
-    # @message = Gosu::Image.from_text(self, "y = #{@y}", Gosu.default_font_name, 20)
-    # @message.draw(0, 25, 0)
+    # message = Gosu::Image.from_text(self, "HI", Gosu.default_font_name, 20)
+    # message.draw(0, 5, 0)
+    # binding.pry
+    # message = Gosu::Image.from_text(self, "<asd<>/asd>", Gosu.default_font_name, 20)
+    # message.draw(0, 25, 0)
   end
 
   def rotate(field)

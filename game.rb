@@ -42,7 +42,7 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    if (@count % 24).zero?
+    if (@count % 12).zero?
       puts "FIELD: \n\n#{fieldstr}"
       puts @block.dna
       add_block_to_field if @block.ground_reached?(@field)
@@ -52,6 +52,7 @@ class GameWindow < Gosu::Window
     draw_field # draw playing fielld
     @block.draw # draw current block
     remove_lines
+    draw_score
   end
 
   def draw_field
@@ -60,6 +61,11 @@ class GameWindow < Gosu::Window
         Gosu.draw_rect(c * blocksize, r * blocksize, blocksize, blocksize, COLORCODES[col]) if col != 0
       end
     end
+  end
+
+  def draw_score
+    msg = Gosu::Image.from_text(nil, "SCORE: #{@score}", Gosu.default_font_name, 20)
+    msg.draw(0, 5, 0)
   end
 
   def remove_lines
