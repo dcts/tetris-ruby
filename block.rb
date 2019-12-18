@@ -15,7 +15,7 @@ class Block
 
   def initialize(options)
     @options = options
-    @dna = BLOCKS[4] #.sample
+    @dna = BLOCKS.sample
     @color = COLORS.sample
     @x = @options.width / 2
     @y = 0
