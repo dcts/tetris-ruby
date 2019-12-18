@@ -33,7 +33,7 @@ class GameWindow < Gosu::Window
   def button_down(button)
     close if button == Gosu::KbEscape
     press_enter if button == Gosu::KbReturn
-    @block.rotate if button == Gosu::KbSpace
+    @block.rotate(@field) if button == Gosu::KbSpace
     @block.move("right", @field) if button == Gosu::KbRight
     @block.move("left", @field)  if button == Gosu::KbLeft
     @block.move("down", @field)  if button == Gosu::KbDown
@@ -75,11 +75,11 @@ class GameWindow < Gosu::Window
   def press_enter
     puts "ENTER PRESSED -> checking if floor reached"
     puts "collision: #{@block.floor_reached?}"
-    # # add block to wall
-    # @block.coordinates.each do |point|
-    #   update_field(point[:x], point[:y], COLORCODES_REVERSED[@block.color])
-    # end
-    # @block = Block.new(@options)
+    # add block to wall
+    @block.coordinates.each do |point|
+      update_field(point[:x], point[:y], COLORCODES_REVERSED[@block.color])
+    end
+    @block = Block.new(@options)
   end
 
   def code2color(code)

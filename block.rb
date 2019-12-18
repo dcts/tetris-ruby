@@ -26,14 +26,19 @@ class Block
   end
 
   def coordinates
+    Block.dna_to_coordinates(@dna, @x, @y)
+  end
+
+  def self.dna_to_coordinates(dna, x, y)
     points = []
-    points << {x: @x, y: @y}
-    @dna.each do |cell|
-      x, y = @x, @y
+    points << {x: x, y: y}
+    dna.each do |cell|
+      x_new, y_new = x, y
       cell.chars.map { |dir| MAPPING[dir] }.each do |arr|
-        x, y = x+arr[0], y+arr[1]
+        x_new += arr[0]
+        y_new += arr[1]
       end
-      points << {x: x, y: y}
+      points << {x: x_new, y: y_new}
     end
     return points
   end
@@ -55,9 +60,9 @@ class Block
     @message.draw(0, 25, 0)
   end
 
-  def rotate
+  def rotate(field)
     dna_future = @dna.map { |block| block.chars.map { |char| ROTATION[char] }.join("") }
-    @dna = dna_future if true
+    @dna = dna_future unless Block.collision?(field, Block.dna_to_coordinates(dna_future, @x, @y))
   end
 
   def move(action = "down", field) # down
@@ -74,15 +79,15 @@ class Block
     end
 
     # only apply changes if no collision
-    unless block_new.collision?(field)
+    unless Block.collision?(field, block_new.coordinates)
       @x = block_new.x
       @y = block_new.y
     end
   end
 
-  def collision?(field)
+  def self.collision?(field, coordinates)
     # get grid
-    self.coordinates.each do |point|
+    coordinates.each do |point|
       begin
         return true if point[:x] < 0 || point[:y] < 0 || field[point[:y]][point[:x]] > 0
       rescue
