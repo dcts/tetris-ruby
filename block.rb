@@ -15,7 +15,7 @@ class Block
 
   def initialize(options)
     @options = options
-    @dna = BLOCKS.sample
+    @dna = BLOCKS[4] #.sample
     @color = COLORS.sample
     @x = @options.width / 2
     @y = 0
@@ -56,7 +56,8 @@ class Block
   end
 
   def rotate
-    @dna.map! { |block| block.chars.map { |char| ROTATION[char] }.join("") }
+    dna_future = @dna.map { |block| block.chars.map { |char| ROTATION[char] }.join("") }
+    @dna = dna_future if true
   end
 
   def move(action = "down", field) # down
