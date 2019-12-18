@@ -98,14 +98,14 @@ class Block
   end
 
   def floor_reached?
-    floor_pos = @options.height
-    diff = 0
-    if @dna.any? { |block| block.include?("UU") }
-      diff = 2
-    elsif @dna.any? { |block| block.include?("U") }
-      diff = 1
-    end
-    @y + diff >= floor_pos - 1
+    # floor_pos = @options.height
+    # diff = 0
+    # if @dna.any? { |block| block.include?("UU") }
+    #   diff = 2
+    # elsif @dna.any? { |block| block.include?("U") }
+    #   diff = 1
+    # end
+    # @y + diff >= floor_pos - 1
   end
 
   BLOCKS = [
