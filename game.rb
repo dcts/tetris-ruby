@@ -5,6 +5,7 @@ require_relative 'options'
 
 class GameWindow < Gosu::Window
   def initialize(options)
+    @score = 0
     @count = 0
     @options = options
     @field = initialize_field # representation of field as string
@@ -52,18 +53,34 @@ class GameWindow < Gosu::Window
     @count += 1
     draw_field # draw playing fielld
     @block.draw # draw current block
+    remove_lines
   end
 
   def draw_field
-    r = 0
-    @field.each do |row|
-      c = 0
-      row.each do |col|
+    @field.each_with_index do |row, r|
+      row.each_with_index do |col, c|
         Gosu.draw_rect(c * blocksize, r * blocksize, blocksize, blocksize, COLORCODES[col]) if col != 0
-        c += 1
       end
-      r += 1
     end
+  end
+
+  def remove_lines
+    finished = false
+    @field.each do |line|
+      # line detected
+      if line.map { |c| c>0 ? 1 : 0 }.sum == line.size
+        line.map! { |c| -1000 }
+      end
+    end
+    size_before = @field.size
+    @field.reject! { |line| line.sum == line.size * -1000 }
+    cleared = size_before - @field.size
+    @score += cleared * @field[0].size
+    x = []
+    cleared.times do
+      x << Array.new(@options.width, 0)
+    end
+    x + @field
   end
 
   private
@@ -102,7 +119,8 @@ class GameWindow < Gosu::Window
     6 => Gosu::Color::YELLOW,
     7 => Gosu::Color::FUCHSIA,
     8 => Gosu::Color::CYAN,
-    9 => Gosu::Color::WHITE
+    9 => Gosu::Color::WHITE,
+    -1000 => Gosu::Color::AQUA
   }
   COLORCODES_REVERSED = {
     Gosu::Color::AQUA => 2,
