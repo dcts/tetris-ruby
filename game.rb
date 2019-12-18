@@ -42,13 +42,11 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    if (@count % 6).zero?
+    if (@count % 12).zero?
       puts "FIELD: \n\n#{fieldstr}"
       puts @block.dna
-      # @block.move("down", @field)
-      # if @block.floor_reached?
-      #   binding.pry
-      # end
+      @block.move("down", @field)
+      add_block_to_wall if @block.floor_reached?
     end
     @count += 1
     draw_field # draw playing fielld
@@ -92,6 +90,10 @@ class GameWindow < Gosu::Window
   def press_enter
     puts "ENTER PRESSED -> checking if floor reached"
     puts "collision: #{@block.floor_reached?}"
+    add_block_to_wall
+  end
+
+  def add_block_to_wall
     # add block to wall
     @block.coordinates.each do |point|
       update_field(point[:x], point[:y], COLORCODES_REVERSED[@block.color])
