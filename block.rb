@@ -54,10 +54,10 @@ class Block
       end
       Gosu.draw_rect(x * blocksize, y * blocksize, blocksize, blocksize, @color)
     end
-    @message = Gosu::Image.from_text(self, "x = #{@x}", Gosu.default_font_name, 20)
-    @message.draw(0, 5, 0)
-    @message = Gosu::Image.from_text(self, "y = #{@y}", Gosu.default_font_name, 20)
-    @message.draw(0, 25, 0)
+    # @message = Gosu::Image.from_text(self, "x = #{@x}", Gosu.default_font_name, 20)
+    # @message.draw(0, 5, 0)
+    # @message = Gosu::Image.from_text(self, "y = #{@y}", Gosu.default_font_name, 20)
+    # @message.draw(0, 25, 0)
   end
 
   def rotate(field)
@@ -85,14 +85,14 @@ class Block
     end
   end
 
+  def move_all_down(field)
+    move("down", field) until ground_reached?(field)
+  end
+
   def self.collision?(field, coordinates)
-    # get grid
     coordinates.each do |point|
-      begin
-        return true if point[:x] < 0 || point[:y] < 0 || field[point[:y]][point[:x]] > 0
-      rescue
-        return true
-      end
+      return true if point[:y] >= field.size || point[:x] >= field[0].size # outside of fields scope
+      return true if point&.[](:x) < 0 || point&.[](:y) < 0 || field[point[:y]][point[:x]] > 0
     end
     return false
   end
@@ -102,6 +102,7 @@ class Block
     x_future = @x
     y_future = @y + 1
     coordinates_future = Block.dna_to_coordinates(@dna, x_future, y_future)
+    # check if a collision occurs
     Block.collision?(field, coordinates_future)
   end
 

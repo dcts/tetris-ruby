@@ -33,12 +33,12 @@ class GameWindow < Gosu::Window
 
   def button_down(button)
     close if button == Gosu::KbEscape
-    press_enter if button == Gosu::KbReturn
     @block.rotate(@field) if button == Gosu::KbSpace
     @block.move("right", @field) if button == Gosu::KbRight
     @block.move("left", @field)  if button == Gosu::KbLeft
     @block.move("down", @field)  if button == Gosu::KbDown
     @block.move("up", @field)    if button == Gosu::KbUp
+    @block.move_all_down(@field) if button == Gosu::KbReturn
   end
 
   def draw
@@ -84,10 +84,6 @@ class GameWindow < Gosu::Window
 
   def blocksize
     @options.blocksize
-  end
-
-  def press_enter
-    add_block_to_field
   end
 
   def add_block_to_field
