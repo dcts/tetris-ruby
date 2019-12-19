@@ -33,18 +33,15 @@ class GameWindow < Gosu::Window
 
   def button_down(button)
     close if button == Gosu::KbEscape
-    @block.rotate(@field) if button == Gosu::KbSpace
+    @block.rotate(@field) if button == Gosu::KbUp
     @block.move("right", @field) if button == Gosu::KbRight
     @block.move("left", @field)  if button == Gosu::KbLeft
     @block.move("down", @field)  if button == Gosu::KbDown
-    @block.move("up", @field)    if button == Gosu::KbUp
-    @block.move_all_down(@field) if button == Gosu::KbReturn
+    @block.move_all_down(@field) if button == Gosu::KbSpace
   end
 
   def draw
-    if (@count % 12).zero?
-      puts "FIELD: \n\n#{fieldstr}"
-      puts @block.dna
+    if (@count % 24).zero?
       add_block_to_field if @block.ground_reached?(@field)
       @block.move("down", @field)
     end

@@ -117,14 +117,14 @@ class Block
     ["DL", "D", "R"],
   ]
   COLORS = [
-    Gosu::Color::WHITE,
-    Gosu::Color::AQUA,
-    Gosu::Color::RED,
-    Gosu::Color::GREEN,
-    Gosu::Color::BLUE,
+    # Gosu::Color::WHITE,
+    # Gosu::Color::AQUAblock,
+    # Gosu::Color::RED,
+    # Gosu::Color::GREEN,
+    # Gosu::Color::BLUE,
     Gosu::Color::YELLOW,
-    Gosu::Color::FUCHSIA,
-    Gosu::Color::CYAN,
+    # Gosu::Color::FUCHSIA,
+    # Gosu::Color::CYAN,
   ]
   MAPPING = {
     "L" => [-1, 0],
