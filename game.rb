@@ -48,6 +48,7 @@ class GameWindow < Gosu::Window
     @count += 1
     draw_field # draw playing fielld
     @block.draw # draw current block
+    @block.draw_ghost(@field) # draw current block
     remove_lines
     draw_score
   end
