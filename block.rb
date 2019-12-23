@@ -54,11 +54,21 @@ class Block
       end
       Gosu.draw_rect(x * blocksize, y * blocksize, blocksize, blocksize, @color)
     end
-    # message = Gosu::Image.from_text(self, "HI", Gosu.default_font_name, 20)
-    # message.draw(0, 5, 0)
-    # binding.pry
-    # message = Gosu::Image.from_text(self, "<asd<>/asd>", Gosu.default_font_name, 20)
-    # message.draw(0, 25, 0)
+  end
+
+  def draw_ghost(field)
+    ghost = Block.copy(self)
+    ghost.move_all_down(field)
+    # draw origin
+    Gosu.draw_rect(ghost.x * blocksize, ghost.y * blocksize, blocksize, blocksize, color_ghost)
+    # draw array
+    ghost.dna.each do |block|
+      x, y = ghost.x, ghost.y
+      block.chars.each do |char|
+        x, y = x+MAPPING[char][0], y+MAPPING[char][1]
+      end
+      Gosu.draw_rect(x * blocksize, y * blocksize, blocksize, blocksize, color_ghost)
+    end
   end
 
   def rotate(field)
@@ -126,6 +136,15 @@ class Block
     # Gosu::Color::FUCHSIA,
     # Gosu::Color::CYAN,
   ]
+
+  def color_ghost
+    color = Gosu::Color::BLACK.dup
+    color.red = 235
+    color.green = 241
+    color.blue = 158
+    return color
+  end
+
   MAPPING = {
     "L" => [-1, 0],
     "R" => [1, 0],
